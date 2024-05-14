@@ -1,12 +1,32 @@
 import React from 'react'
+import { useState,useEffect } from 'react';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import list from "../../public/list.json"
 import Slider from "react-slick";
 import Cards from './Cards';
+import axios from 'axios'
+
+
+
 export default function Freebook() {
 
-    const filterData = list.filter((item) => item.category === "Free")
+    const [allBooks, setBook] = useState([])
+    useEffect(() => {
+        const getBook = async () => {
+            try {
+                const res = await axios.get("http://localhost:3000/book");
+                //    console.log(res.data)
+                setBook(res.data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getBook();
+    }, [])
+const freebooks = allBooks.filter((item) => item.category === "Free")
+
+
+
     var settings = {
         dots: true,
         infinite: false,
@@ -42,24 +62,26 @@ export default function Freebook() {
         ]
     };
     //    console.log(filterData)
-
-
-    
     return (
         <div>
-            <div className="bg-white max-w-screen-2xl container mx-auto md:px-20 px-4 flex flex-col ">
+            <div className=" max-w-screen-2xl container mx-auto md:px-20 px-4  ">
 
-                <div>
-                    <h1 className="font-semibold text-x pb-2 mt-16">Free Offers Course</h1>
-                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque consequuntur perspiciatis tempora voluptas blanditiis libero eaque ut laboriosam sapiente ipsa?</p>
-                </div>
+            <div>
+          <h1 className="font-semibold text-xl pb-2">Free Offered Courses</h1>
+          <p>
+          Expand your knowledge with our selection of free courses. 
+          From literature to technology, 
+          there's something for every interest.
+          </p>
+        </div>
+
 
                 <div className="mt-10">
                     <Slider {...settings}>
 
-                        {filterData.map((item) => (
+                        {freebooks.map((item) => (
                             <Cards item={item} key={item.id} />
-                            
+
                         ))}
 
                     </Slider>
@@ -70,3 +92,4 @@ export default function Freebook() {
         </div>
     )
 }
+

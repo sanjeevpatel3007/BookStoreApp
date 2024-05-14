@@ -8,7 +8,11 @@ export default function Courses() {
     <div>
       
 <Navbar />
-<Course/>
+<div className=" min-h-screen">
+        <Course />
+      </div>
+
+{/* <Course/> */}
 <Footer/>
 
 

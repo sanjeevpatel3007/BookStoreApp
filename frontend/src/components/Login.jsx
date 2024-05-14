@@ -1,27 +1,65 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link , useNavigate  } from 'react-router-dom'
 import { useForm } from "react-hook-form"
+import axios from 'axios'
+import toast from 'react-hot-toast'
 export default function Login() {
+  const navigate = useNavigate(); // Initialize useNavigate hook
     const {
         register,
         handleSubmit,
-//   watch,
+//   watch,and i have proble 
         formState: { errors },
       } = useForm()
     
-      const onSubmit = (data) => console.log(data)
-    //   console.log(watch("example"))
+      const onSubmit = async(data ) => {
+        // e.preventDefault(); 
+        const userInfo={
+            email:data.email,
+            password:data.password
+            // confirmPassword:data.confirmPassword,
+          }
+          await axios.post("http://localhost:3000/user/login" ,userInfo)
+          .then((res)=>{
+            console.log(res.data)
+            if(res.data){
+    //   alert("login successfully")
+      toast.success(' Login Successfully!');   //extra librebry use
+      document.getElementById('my_modal_3').close()
+     setTimeout(()=>{
+      
+      localStorage.setItem('Users',JSON.stringify(res.data.user));
+      navigate('/'); // Redirect to home page
+      window.location.reload() 
+     },500)
+            }
+          })
+          .catch((err)=>{
+            if(err.response){
+            console.log(err)
+            // alert("error : " + err.response.data.message)
+            toast.error("error : " + err.response.data.message);
+            // setTimeout(()=>{},2000);
+          }
+          })
+        
+      
+        }
+
+
     return (
         <div>
             {/* You can open the modal using document.getElementById('ID').showModal() method */}
             {/* <button className="btn " onClick={()=>document.getElementById('my_modal_3').showModal()}></button> */}
             <dialog id="my_modal_3" className="modal ">
-                <div className="modal-box bg-white">
+                <div className="modal-box bg-slate-100">
                     <form method="dialog" >
                         {/* if there is a button in form, it will close the modal */}
-                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                        
+                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-red-500">✕</button>
+
                     </form >
-<form  onSubmit={handleSubmit(onSubmit)}>
+                <form  onSubmit={handleSubmit(onSubmit)}>
                     <div  >
 
                     <h3 className="font-bold text-lg">Login</h3>
@@ -39,17 +77,21 @@ export default function Login() {
                         <br />
                         <span> Passward :</span>
                         <br />
-                        <input  className='outline-none p-1  bg-slate-300' type="password" placeholder='********'  {...register("passward", { required: true })}/>
+                        <input  className='outline-none p-1  bg-slate-300' type="password" placeholder='********'  {...register("password", { required: true })}/>
                       <br />
-                        {errors.passward && <span className='text-red-500'>This field is required</span>}
-                        <br />
-                        <br />
+                        {errors.password && <span className='text-red-500'>This field is required</span>}
                         <br />
                         
+                        
                         <button className="btn btn-sm bg-pink-600 border-none mt-2">Login</button>
-                           <p>Not Registered ? {"  "} 
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                           <p className='text-slate-500'>if you are not Registered ? {"  "} 
+                           <br />
                           <Link to={"/Signup"}>
-                           <span className="text-blue-500 underline">Signup</span>
+                           <span className="btn btn-sm bg-pink-600 border-none mt-2">Signup</span>
                            </Link> 
                            </p>
                            
