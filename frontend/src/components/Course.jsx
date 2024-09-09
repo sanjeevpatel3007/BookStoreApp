@@ -12,7 +12,7 @@ export default function Course() {
     useEffect(() => {
         const getBook = async () => {
             try {
-                const res = await axios.get("http://localhost:3000/book");
+                const res = await axios.get("https://bookstoreapp-oakd.onrender.com/book");
                 //    console.log(res.data)
                 setBook(res.data)
             } catch (error) {
