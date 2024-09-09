@@ -27,7 +27,7 @@ export default function Signup() {
       password:data.password
       // confirmPassword:data.confirmPassword,
     }
-    await axios.post("http://localhost:3000/user/signup" ,userInfo)
+    await axios.post("https://bookstoreapp-oakd.onrender.com/user/signup" ,userInfo)
     .then((res)=>{
       console.log(res.data)
 
